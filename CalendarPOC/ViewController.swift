@@ -12,6 +12,8 @@ import JTAppleCalendar
 class ViewController: UIViewController {
     
     let calendarView: JTACMonthView
+    let monthFormatter: DateFormatter
+    
     init() {
         
         calendarView = JTACMonthView(frame: .zero)
@@ -22,11 +24,16 @@ class ViewController: UIViewController {
         calendarView.scrollToDate(Date())
         calendarView.showsVerticalScrollIndicator = false
         
+        monthFormatter = DateFormatter()
+        monthFormatter.dateFormat = "MMMM"
+        
         super.init(nibName: nil, bundle: nil)
         
         calendarView.calendarDataSource = self
         calendarView.calendarDelegate = self
         calendarView.register(DayCell.self, forCellWithReuseIdentifier: DayCell.reuseIdentifier)
+        
+        calendarView.register(DateHeader.self, forSupplementaryViewOfKind: DateHeader.reuseIdentifier, withReuseIdentifier: DateHeader.reuseIdentifier)
     }
     
     required init?(coder: NSCoder) {
@@ -122,5 +129,15 @@ extension ViewController: JTACMonthViewDelegate {
     
     func calendar(_ calendar: JTACMonthView, didSelectDate date: Date, cell: JTACDayCell?, cellState: CellState, indexPath: IndexPath) {
         print(date)
+    }
+    
+    func calendar(_ calendar: JTACMonthView, headerViewForDateRange range: (start: Date, end: Date), at indexPath: IndexPath) -> JTACMonthReusableView {
+        let header = calendar.dequeueReusableJTAppleSupplementaryView(withReuseIdentifier: DateHeader.reuseIdentifier, for: indexPath) as! DateHeader
+        header.monthTitle.text = self.monthFormatter.string(from: range.start)
+        return header
+    }
+    
+    func calendarSizeForMonths(_ calendar: JTACMonthView?) -> MonthSize? {
+        return MonthSize(defaultSize: 40)
     }
 }
