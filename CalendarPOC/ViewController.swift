@@ -7,11 +7,26 @@
 //
 
 import UIKit
+import JTAppleCalendar
 
 class ViewController: UIViewController {
+    
+    let calendarView: JTACMonthView
 
     init() {
+        
+        calendarView = JTACMonthView(frame: .zero)
+        calendarView.scrollDirection = .vertical
+        calendarView.scrollingMode = .stopAtEachCalendarFrame
+        calendarView.translatesAutoresizingMaskIntoConstraints = false
+        calendarView.backgroundColor = .lightGray
+        
         super.init(nibName: nil, bundle: nil)
+        
+        calendarView.calendarDataSource = self
+        calendarView.calendarDelegate = self
+        calendarView.register(DayCell.self, forCellWithReuseIdentifier: DayCell.reuseIdentifier)
+
     }
     
     required init?(coder: NSCoder) {
@@ -20,10 +35,85 @@ class ViewController: UIViewController {
     
     // MARK: - UIViewController Lifecycle
     
+    override func loadView() {
+        super.loadView()
+        
+        view.addSubview(calendarView)
+        
+        setupConstraints()
+    }
+    
+    private func setupConstraints() {
+        let constraints = [
+            calendarView.topAnchor.constraint(equalToSystemSpacingBelow: view.safeAreaLayoutGuide.topAnchor, multiplier: 1.0),
+            calendarView.leadingAnchor.constraint(equalToSystemSpacingAfter: view.safeAreaLayoutGuide.leadingAnchor, multiplier: 1.0),
+            calendarView.heightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.heightAnchor, multiplier: 0.5),
+            view.safeAreaLayoutGuide.trailingAnchor.constraint(equalToSystemSpacingAfter: calendarView.trailingAnchor, multiplier: 1.0),
+            view.safeAreaLayoutGuide.bottomAnchor.constraint(greaterThanOrEqualToSystemSpacingBelow: calendarView.bottomAnchor, multiplier: 1.0)
+        ]
+        NSLayoutConstraint.activate(constraints)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .orange
+        view.backgroundColor = .white
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Today", style: .done, target: self, action: #selector(scrollToToday(_:)))
+    }
+    
+    //MARK: - Actions
+    
+    @objc
+    func scrollToToday(_ sender: Any) {
+        calendarView.scrollToDate(Date())
     }
 }
 
+extension ViewController: JTACMonthViewDataSource {
+    func configureCalendar(_ calendar: JTACMonthView) -> ConfigurationParameters {
+        let startDate = Date(timeIntervalSinceNow: -60*60*24*365)
+        let endDate = Date(timeIntervalSinceNow: 60*60*24*365)
+        
+        return ConfigurationParameters(startDate: startDate, endDate: endDate)
+    }
+}
+
+extension ViewController: JTACMonthViewDelegate {
+    func calendar(_ calendar: JTACMonthView, willDisplay cell: JTACDayCell, forItemAt date: Date, cellState: CellState, indexPath: IndexPath) {
+        guard let cell = cell as? DayCell else {
+            NSLog("This should never happen")
+            assert(false)
+        }
+        
+        configure(cell, withCellState: cellState)
+    }
+    
+    func calendar(_ calendar: JTACMonthView, cellForItemAt date: Date, cellState: CellState, indexPath: IndexPath) -> JTACDayCell {
+        guard let cell = calendarView.dequeueReusableJTAppleCell(withReuseIdentifier: DayCell.reuseIdentifier, for: indexPath) as? DayCell else {
+            NSLog("This should never happen")
+            assert(false)
+        }
+        
+        configure(cell, withCellState: cellState)
+        return cell
+    }
+    
+    private func configure(_ cell: DayCell, withCellState cellState: CellState) {
+        cell.dateLabel.text = cellState.text
+        
+        if cellState.dateBelongsTo == .thisMonth {
+            cell.isHidden = false
+        } else {
+            cell.isHidden = true
+        }
+    }
+    
+    func calendar(_ calendar: JTACMonthView, shouldSelectDate date: Date, cell: JTACDayCell?, cellState: CellState, indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    func calendar(_ calendar: JTACMonthView, didSelectDate date: Date, cell: JTACDayCell?, cellState: CellState, indexPath: IndexPath) {
+        print(date)
+    }
+}
