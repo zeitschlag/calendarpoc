@@ -12,7 +12,6 @@ import JTAppleCalendar
 class ViewController: UIViewController {
     
     let calendarView: JTACMonthView
-
     init() {
         
         calendarView = JTACMonthView(frame: .zero)
@@ -20,13 +19,14 @@ class ViewController: UIViewController {
         calendarView.scrollingMode = .stopAtEachCalendarFrame
         calendarView.translatesAutoresizingMaskIntoConstraints = false
         calendarView.backgroundColor = .lightGray
+        calendarView.scrollToDate(Date())
+        calendarView.showsVerticalScrollIndicator = false
         
         super.init(nibName: nil, bundle: nil)
         
         calendarView.calendarDataSource = self
         calendarView.calendarDelegate = self
         calendarView.register(DayCell.self, forCellWithReuseIdentifier: DayCell.reuseIdentifier)
-
     }
     
     required init?(coder: NSCoder) {
@@ -70,15 +70,22 @@ class ViewController: UIViewController {
     }
 }
 
+//MARK: - JTACMonthViewDataSource
 extension ViewController: JTACMonthViewDataSource {
     func configureCalendar(_ calendar: JTACMonthView) -> ConfigurationParameters {
         let startDate = Date(timeIntervalSinceNow: -60*60*24*365)
         let endDate = Date(timeIntervalSinceNow: 60*60*24*365)
+        let gregorianCalendar = Calendar(identifier: .gregorian)
         
-        return ConfigurationParameters(startDate: startDate, endDate: endDate)
+        return ConfigurationParameters(startDate: startDate,
+                                       endDate: endDate,
+                                       calendar: gregorianCalendar,
+                                       firstDayOfWeek: .monday,
+                                       hasStrictBoundaries: false)
     }
 }
 
+//MARK: - JTACMonthViewDelegate
 extension ViewController: JTACMonthViewDelegate {
     func calendar(_ calendar: JTACMonthView, willDisplay cell: JTACDayCell, forItemAt date: Date, cellState: CellState, indexPath: IndexPath) {
         guard let cell = cell as? DayCell else {
