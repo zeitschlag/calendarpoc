@@ -1,6 +1,6 @@
 
-# Created by https://www.gitignore.io/api/xcode,macos,swiftpm
-# Edit at https://www.gitignore.io/?templates=xcode,macos,swiftpm
+# Created by https://www.gitignore.io/api/xcode,macos
+# Edit at https://www.gitignore.io/?templates=xcode,macos
 
 ### macOS ###
 # General
@@ -30,14 +30,6 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
-### SwiftPM ###
-Packages
-.build/
-xcuserdata
-DerivedData/
-*.xcodeproj
-
-
 ### Xcode ###
 # Xcode
 #
@@ -52,6 +44,7 @@ xcuserdata/
 
 ## compatibility with Xcode 3 and earlier (ignoring not required starting Xcode 4)
 build/
+DerivedData/
 *.moved-aside
 *.pbxuser
 !default.pbxuser
@@ -72,4 +65,4 @@ build/
 ### Xcode Patch ###
 **/xcshareddata/WorkspaceSettings.xcsettings
 
-# End of https://www.gitignore.io/api/xcode,macos,swiftpm
+# End of https://www.gitignore.io/api/xcode,macos
