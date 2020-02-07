@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -11,6 +11,7 @@
 		B34582ED23ED9B96003460AE /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B34582EC23ED9B96003460AE /* ViewController.swift */; };
 		B34582F223ED9B98003460AE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B34582F123ED9B98003460AE /* Assets.xcassets */; };
 		B34582F523ED9B98003460AE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B34582F323ED9B98003460AE /* LaunchScreen.storyboard */; };
+		B34582FF23ED9E51003460AE /* JTAppleCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = B34582FE23ED9E51003460AE /* JTAppleCalendar */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B34582FF23ED9E51003460AE /* JTAppleCalendar in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -79,6 +81,9 @@
 			dependencies = (
 			);
 			name = CalendarPOC;
+			packageProductDependencies = (
+				B34582FE23ED9E51003460AE /* JTAppleCalendar */,
+			);
 			productName = CalendarPOC;
 			productReference = B34582E523ED9B96003460AE /* CalendarPOC.app */;
 			productType = "com.apple.product-type.application";
@@ -107,6 +112,9 @@
 				Base,
 			);
 			mainGroup = B34582DC23ED9B96003460AE;
+			packageReferences = (
+				B34582FD23ED9E51003460AE /* XCRemoteSwiftPackageReference "JTAppleCalendar" */,
+			);
 			productRefGroup = B34582E623ED9B96003460AE /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -324,6 +332,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		B34582FD23ED9E51003460AE /* XCRemoteSwiftPackageReference "JTAppleCalendar" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/patchthecode/JTAppleCalendar.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.0.3;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		B34582FE23ED9E51003460AE /* JTAppleCalendar */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B34582FD23ED9E51003460AE /* XCRemoteSwiftPackageReference "JTAppleCalendar" */;
+			productName = JTAppleCalendar;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = B34582DD23ED9B96003460AE /* Project object */;
 }
